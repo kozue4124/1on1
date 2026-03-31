@@ -15,6 +15,7 @@ const qualityCriteria = [
 
 type VideoEvalForm = {
   videoTitle: string
+  workHours: string
   qualityCutEditing: number
   qualityColorGrading: number
   qualityTelop: number
@@ -25,6 +26,7 @@ type VideoEvalForm = {
 function defaultVideoEval(): VideoEvalForm {
   return {
     videoTitle: '',
+    workHours: '',
     qualityCutEditing: 3,
     qualityColorGrading: 3,
     qualityTelop: 3,
@@ -83,17 +85,33 @@ function VideoEvalCard({
         )}
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          動画タイトル <span className="text-gray-400 font-normal">（任意）</span>
-        </label>
-        <input
-          type="text"
-          value={ev.videoTitle}
-          onChange={(e) => onChange('videoTitle', e.target.value)}
-          placeholder="例: 商品紹介動画A"
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
-        />
+      <div className="grid grid-cols-2 gap-3">
+        <div className="col-span-2 sm:col-span-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            動画タイトル <span className="text-gray-400 font-normal">（任意）</span>
+          </label>
+          <input
+            type="text"
+            value={ev.videoTitle}
+            onChange={(e) => onChange('videoTitle', e.target.value)}
+            placeholder="例: 商品紹介動画A"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+          />
+        </div>
+        <div className="col-span-2 sm:col-span-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            工数 <span className="text-gray-400 font-normal">（時間・任意）</span>
+          </label>
+          <input
+            type="number"
+            value={ev.workHours}
+            onChange={(e) => onChange('workHours', e.target.value)}
+            min="0"
+            step="0.5"
+            placeholder="例: 8"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+          />
+        </div>
       </div>
 
       <div className="space-y-3">

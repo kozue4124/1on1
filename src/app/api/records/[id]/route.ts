@@ -65,6 +65,7 @@ export async function PUT(
           deleteMany: {},
           create: (videoEvaluations ?? []).map((v: {
             videoTitle?: string
+            workHours?: number | string
             qualityCutEditing: number
             qualityColorGrading: number
             qualityTelop: number
@@ -72,6 +73,7 @@ export async function PUT(
             qualityOverallFlow: number
           }) => ({
             videoTitle: v.videoTitle || null,
+            workHours: v.workHours !== undefined && v.workHours !== '' ? Number(v.workHours) : null,
             qualityCutEditing: Number(v.qualityCutEditing),
             qualityColorGrading: Number(v.qualityColorGrading),
             qualityTelop: Number(v.qualityTelop),

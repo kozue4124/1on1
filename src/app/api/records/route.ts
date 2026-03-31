@@ -18,6 +18,7 @@ export async function GET() {
 
 type VideoEvalInput = {
   videoTitle?: string
+  workHours?: number | string
   qualityCutEditing: number
   qualityColorGrading: number
   qualityTelop: number
@@ -61,6 +62,7 @@ export async function POST(request: NextRequest) {
         videoEvaluations: {
           create: (videoEvaluations ?? []).map((v: VideoEvalInput) => ({
             videoTitle: v.videoTitle || null,
+            workHours: v.workHours !== undefined && v.workHours !== '' ? Number(v.workHours) : null,
             qualityCutEditing: Number(v.qualityCutEditing),
             qualityColorGrading: Number(v.qualityColorGrading),
             qualityTelop: Number(v.qualityTelop),

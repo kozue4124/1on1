@@ -8,6 +8,7 @@ import { ArrowLeft, Edit2, Trash2, Save, X, Star, Plus, FileEdit, Send } from 'l
 interface VideoEvaluation {
   id: string
   videoTitle: string | null
+  workHours: number | null
   qualityCutEditing: number
   qualityColorGrading: number
   qualityTelop: number
@@ -36,6 +37,7 @@ interface OneOnOne {
 
 type VideoEvalForm = {
   videoTitle: string
+  workHours: string
   qualityCutEditing: number
   qualityColorGrading: number
   qualityTelop: number
@@ -95,7 +97,7 @@ function ScoreSelector({ value, onChange }: { value: number; onChange: (v: numbe
 }
 
 function defaultVideoEval(): VideoEvalForm {
-  return { videoTitle: '', qualityCutEditing: 3, qualityColorGrading: 3, qualityTelop: 3, qualityBgmSe: 3, qualityOverallFlow: 3 }
+  return { videoTitle: '', workHours: '', qualityCutEditing: 3, qualityColorGrading: 3, qualityTelop: 3, qualityBgmSe: 3, qualityOverallFlow: 3 }
 }
 
 export default function RecordDetailPage() {
@@ -127,6 +129,7 @@ export default function RecordDetailPage() {
         setVideoEvals(
           data.videoEvaluations.map((v: VideoEvaluation) => ({
             videoTitle: v.videoTitle ?? '',
+            workHours: v.workHours != null ? String(v.workHours) : '',
             qualityCutEditing: v.qualityCutEditing,
             qualityColorGrading: v.qualityColorGrading,
             qualityTelop: v.qualityTelop,
@@ -229,6 +232,7 @@ export default function RecordDetailPage() {
     setVideoEvals(
       (record?.videoEvaluations ?? []).map((v) => ({
         videoTitle: v.videoTitle ?? '',
+        workHours: v.workHours != null ? String(v.workHours) : '',
         qualityCutEditing: v.qualityCutEditing,
         qualityColorGrading: v.qualityColorGrading,
         qualityTelop: v.qualityTelop,
@@ -424,17 +428,33 @@ export default function RecordDetailPage() {
                       </button>
                     )}
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      動画タイトル <span className="text-gray-400 font-normal">（任意）</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={ev.videoTitle}
-                      onChange={(e) => handleVideoChange(i, 'videoTitle', e.target.value)}
-                      placeholder="例: 商品紹介動画A"
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
-                    />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="col-span-2 sm:col-span-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        動画タイトル <span className="text-gray-400 font-normal">（任意）</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={ev.videoTitle}
+                        onChange={(e) => handleVideoChange(i, 'videoTitle', e.target.value)}
+                        placeholder="例: 商品紹介動画A"
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                      />
+                    </div>
+                    <div className="col-span-2 sm:col-span-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        工数 <span className="text-gray-400 font-normal">（時間・任意）</span>
+                      </label>
+                      <input
+                        type="number"
+                        value={ev.workHours}
+                        onChange={(e) => handleVideoChange(i, 'workHours', e.target.value)}
+                        min="0"
+                        step="0.5"
+                        placeholder="例: 8"
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                      />
+                    </div>
                   </div>
                   <div className="space-y-3">
                     {qualityCriteria.map((c) => (
@@ -467,10 +487,15 @@ export default function RecordDetailPage() {
               {record.videoEvaluations.map((v, i) => (
                 <div key={v.id} className="border border-gray-100 rounded-xl p-5 bg-gray-50">
                   <div className="flex items-center justify-between mb-4">
-                    <div>
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-xs text-indigo-600 font-semibold">動画 {i + 1}</span>
                       {v.videoTitle && (
-                        <span className="ml-2 text-sm font-semibold text-gray-800">{v.videoTitle}</span>
+                        <span className="text-sm font-semibold text-gray-800">{v.videoTitle}</span>
+                      )}
+                      {v.workHours != null && (
+                        <span className="inline-flex items-center gap-1 bg-teal-50 text-teal-700 text-xs font-semibold px-2 py-0.5 rounded-full border border-teal-200">
+                          ⏱ {v.workHours}h
+                        </span>
                       )}
                     </div>
                     <div className="flex items-center gap-1">
@@ -492,16 +517,33 @@ export default function RecordDetailPage() {
                   </div>
                 </div>
               ))}
-              {record.videoEvaluations.length > 1 && (
-                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                  <span className="font-semibold text-gray-700">全体平均スコア</span>
-                  <div className="flex items-center gap-1">
-                    <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                    <span className="font-bold text-lg text-gray-800">{avg.toFixed(1)}</span>
-                    <span className="text-gray-400 text-sm">/ 5.0</span>
+              {record.videoEvaluations.length > 0 && (() => {
+                const videosWithHours = record.videoEvaluations.filter(v => v.workHours != null)
+                const totalVideoHours = videosWithHours.reduce((sum, v) => sum + (v.workHours ?? 0), 0)
+                return (
+                  <div className="pt-3 border-t border-gray-100 space-y-2">
+                    {videosWithHours.length > 0 && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-500">
+                          動画別工数合計
+                          <span className="ml-1.5 text-xs text-gray-400">（{videosWithHours.length}本分）</span>
+                        </span>
+                        <span className="font-semibold text-teal-700">⏱ {totalVideoHours}h</span>
+                      </div>
+                    )}
+                    {record.videoEvaluations.length > 1 && (
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-gray-700">全体平均スコア</span>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                          <span className="font-bold text-lg text-gray-800">{avg.toFixed(1)}</span>
+                          <span className="text-gray-400 text-sm">/ 5.0</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              )}
+                )
+              })()}
             </div>
           )}
         </section>

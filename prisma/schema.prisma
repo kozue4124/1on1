@@ -43,6 +43,7 @@ model VideoEvaluation {
   oneOnOne   OneOnOne @relation(fields: [oneOnOneId], references: [id], onDelete: Cascade)
 
   videoTitle String? // 動画タイトル（任意）
+  workHours  Float?  // この動画にかかった工数（任意）
 
   // Quality scores (1-5)
   qualityCutEditing   Int // カット編集の精度
