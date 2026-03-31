@@ -1,1 +1,0 @@
-ALTER TABLE "OneOnOne" ADD COLUMN "subTaskMemo" TEXT;
