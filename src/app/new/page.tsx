@@ -141,8 +141,6 @@ export default function NewRecordPage() {
     employeeName: '',
     year: currentYear,
     month: currentMonth,
-    materialHours: '',
-    materialCount: '',
     workHours: '',
     productionCount: '',
     subTaskMemo: '',
@@ -281,37 +279,6 @@ export default function NewRecordPage() {
           <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-bold text-gray-800 mb-5 pb-2 border-b border-gray-100">作業実績</h2>
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  素材動画の時間数（時間）<span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="number"
-                  name="materialHours"
-                  value={form.materialHours}
-                  onChange={handleChange}
-                  required
-                  min="0"
-                  step="0.1"
-                  placeholder="例: 12.5"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  素材動画の本数（本）<span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="number"
-                  name="materialCount"
-                  value={form.materialCount}
-                  onChange={handleChange}
-                  required
-                  min="0"
-                  placeholder="例: 8"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   工数（時間）<span className="text-red-500">*</span>

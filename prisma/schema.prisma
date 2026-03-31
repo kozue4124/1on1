@@ -13,8 +13,6 @@ model OneOnOne {
   employeeName String
 
   // Work metrics
-  materialHours   Float
-  materialCount   Int
   workHours       Float
   productionCount Int
 

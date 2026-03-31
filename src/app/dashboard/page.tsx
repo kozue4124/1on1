@@ -30,8 +30,6 @@ interface OneOnOne {
   year: number
   month: number
   employeeName: string
-  materialHours: number
-  materialCount: number
   workHours: number
   productionCount: number
   videoEvaluations: VideoEvaluation[]
@@ -573,7 +571,6 @@ export default function DashboardPage() {
                       <th className="text-right pb-3 text-gray-500 font-medium">評価動画数</th>
                       <th className="text-right pb-3 text-gray-500 font-medium">制作本数</th>
                       <th className="text-right pb-3 text-gray-500 font-medium">工数 (h)</th>
-                      <th className="text-right pb-3 text-gray-500 font-medium">素材 (h)</th>
                       <th className="text-right pb-3 text-gray-500 font-medium">平均スコア</th>
                       <th className="pb-3" />
                     </tr>
@@ -604,7 +601,6 @@ export default function DashboardPage() {
                           <td className="py-3 text-right text-gray-600">{r.videoEvaluations.length} 本</td>
                           <td className="py-3 text-right text-gray-600">{r.productionCount} 本</td>
                           <td className="py-3 text-right text-gray-600">{r.workHours} h</td>
-                          <td className="py-3 text-right text-gray-600">{r.materialHours} h</td>
                           <td className="py-3 text-right">
                             {r.videoEvaluations.length > 0 ? (
                               <span className={`flex items-center justify-end gap-1 font-bold ${scoreColor(avg)}`}>

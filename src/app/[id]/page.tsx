@@ -22,8 +22,6 @@ interface OneOnOne {
   year: number
   month: number
   employeeName: string
-  materialHours: number
-  materialCount: number
   workHours: number
   productionCount: number
   videoEvaluations: VideoEvaluation[]
@@ -370,8 +368,6 @@ export default function RecordDetailPage() {
           {isEditing ? (
             <div className="grid grid-cols-2 gap-4">
               {[
-                { name: 'materialHours', label: '素材動画の時間数（時間）', step: '0.1' },
-                { name: 'materialCount', label: '素材動画の本数（本）', step: '1' },
                 { name: 'workHours', label: '工数（時間）', step: '0.5' },
                 { name: 'productionCount', label: '1ヶ月の制作本数（本）', step: '1' },
               ].map((f) => (
@@ -390,10 +386,8 @@ export default function RecordDetailPage() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 gap-6">
               {[
-                { value: `${record.materialHours}h`, label: '素材動画の時間数' },
-                { value: `${record.materialCount}本`, label: '素材動画の本数' },
                 { value: `${record.workHours}h`, label: '工数' },
                 { value: `${record.productionCount}本`, label: '制作本数' },
               ].map((item) => (
