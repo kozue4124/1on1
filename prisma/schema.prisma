@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model OneOnOne {
+  id           String   @id @default(cuid())
+  year         Int
+  month        Int
+  employeeName String
+
+  // Work metrics
+  materialHours   Float
+  materialCount   Int
+  workHours       Float
+  productionCount Int
+
+  // Video evaluations (one-to-many)
+  videoEvaluations VideoEvaluation[]
+
+  // Status
+  status String @default("PUBLISHED") // "DRAFT" or "PUBLISHED"
+
+  // Sub task memo
+  subTaskMemo String? // 動画編集以外のサブ業務メモ
+
+  // Review
+  lastMonthReview String
+  thisMonthGoal   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([year, month, employeeName])
+}
+
+model VideoEvaluation {
+  id         String   @id @default(cuid())
+  oneOnOneId String
+  oneOnOne   OneOnOne @relation(fields: [oneOnOneId], references: [id], onDelete: Cascade)
+
+  videoTitle String? // 動画タイトル（任意）
+
+  // Quality scores (1-5)
+  qualityCutEditing   Int // カット編集の精度
+  qualityColorGrading Int // カラーグレーディング
+  qualityTelop        Int // テロップ・テキストデザイン
+  qualityBgmSe        Int // BGM・効果音の選定と調整
+  qualityOverallFlow  Int // 全体的な構成・流れ
+
+  createdAt DateTime @default(now())
+}
