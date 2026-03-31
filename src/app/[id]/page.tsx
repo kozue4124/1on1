@@ -190,6 +190,7 @@ export default function RecordDetailPage() {
   }
 
   const handlePublish = async () => {
+    if (!record) return
     setPublishing(true)
     setSaveError('')
     try {
